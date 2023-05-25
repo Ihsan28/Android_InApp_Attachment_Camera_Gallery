@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">chat-attachment-camera-gallery</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="attach">Attach</string>
+    <string name="click_here_to_select_an_image">Click Here to select an Image</string>
+    <string name="capture">Capture</string>
+    <string name="flip">flip</string>
+    <string name="flip_camera">Flip Camera</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="show_gallery">Show Gallery</string>
+    <string name="crop_image_floating_button">crop image floating button</string>
+    <string name="attachment">Attachment</string>
+    <string name="back_button">back button</string>
+    <string name="record_video">record video</string>
+    <string name="enter_your_message">Enter your message...</string>
+    <string name="this_is_a_image">This is a Image</string>
+    <string name="loading_foreground">loading foreground</string>
+    <string name="recording_indicator">recording indicator</string>
+</resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/bottomAttachmentOptionFragment">
+
+    <fragment
+        android:id="@+id/bottomAttachmentOptionFragment"
+        android:name="com.ihsan.chat_attachment_camera_gallery.ui.BottomAttachmentOptionFragment"
+        android:label="fragment_bottom_attachment_option"
+        tools:layout="@layout/fragment_bottom_attachment_option" >
+        <action
+            android:id="@+id/action_bottomAttachmentOptionFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_bottomAttachmentOptionFragment_to_exoPlayerFragment"
+            app:destination="@id/exoPlayerFragment" />
+        <argument
+            android:name="messageType"
+            app:argType="com.ihsan.chat_attachment_camera_gallery.model.MessageType"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="fileUri"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue='""' />
+        <action
+            android:id="@+id/action_bottomAttachmentOptionFragment_to_cameraPreviewFragment"
+            app:destination="@id/cameraPreviewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.ihsan.chat_attachment_camera_gallery.ui.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_bottomAttachmentOptionFragment"
+            app:destination="@id/bottomAttachmentOptionFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_cameraPreviewFragment"
+            app:destination="@id/cameraPreviewFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_exoPlayerFragment"
+            app:destination="@id/exoPlayerFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/cameraPreviewFragment"
+        android:name="com.ihsan.chat_attachment_camera_gallery.ui.CameraPreviewFragment"
+        android:label="fragment_camera_preview"
+        tools:layout="@layout/fragment_camera_preview" >
+        <action
+            android:id="@+id/action_cameraPreviewFragment_to_bottomAttachmentOptionFragment"
+            app:destination="@id/bottomAttachmentOptionFragment" />
+        <action
+            android:id="@+id/action_cameraPreviewFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+        <argument
+            android:name="photoUri"
+            app:argType="string" />
+        <argument
+            android:name="backTo"
+            app:argType="com.ihsan.chat_attachment_camera_gallery.model.BackState" />
+        <argument
+            android:name="modifyImage"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/exoPlayerFragment"
+        android:name="com.ihsan.chat_attachment_camera_gallery.ui.ExoPlayerFragment"
+        android:label="fragment_exo_player"
+        tools:layout="@layout/fragment_exo_player" >
+        <argument
+            android:name="uriString"
+            app:argType="string"
+            android:defaultValue='""' />
+        <argument
+            android:name="backTo"
+            app:argType="com.ihsan.chat_attachment_camera_gallery.model.BackState" />
+        <argument
+            android:name="onlyPreview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_exoPlayerFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_exoPlayerFragment_to_bottomAttachmentOptionFragment"
+            app:destination="@id/bottomAttachmentOptionFragment" />
+    </fragment>
+</navigation>

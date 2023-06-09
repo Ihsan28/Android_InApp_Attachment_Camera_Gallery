@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
@@ -86,8 +88,21 @@ class BottomAttachmentOptionFragment : Fragment() {
             }
         }
 
-        //calling adapter to load conversation
-        callAdapter()
+        if (conversation.isEmpty()) {
+            loadLocalFiles()
+        }
+
+        if (savedInstanceState != null) {
+            val savedRecyclerState = savedInstanceState.getParcelable<Parcelable>("recyclerViewState")
+            recyclerView.layoutManager?.onRestoreInstanceState(savedRecyclerState)
+            if (conversation.isNotEmpty()) {
+                Log.d(TAG, "callAdapter: ${conversation.size}")
+                recyclerView.adapter = MessageAdapter(conversation)
+            }
+        } else {
+            //calling adapter to load conversation
+            callAdapter()
+        }
 
         imageSelectLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -202,6 +217,14 @@ class BottomAttachmentOptionFragment : Fragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(
+            "recyclerViewState",
+            recyclerView.layoutManager?.onSaveInstanceState()
+        )
+    }
+
     private fun addToConversation(messageType: MessageType, message: String) {
         val textMessage = Message(
             messageType,
@@ -218,6 +241,7 @@ class BottomAttachmentOptionFragment : Fragment() {
 
     private fun callAdapter() {
         Log.d(TAG, "callAdapter: conversation size ${conversation.size}")
+
         if (conversation.isNotEmpty()) {
             Log.d(TAG, "callAdapter: ${conversation.size}")
             val adapter = MessageAdapter(conversation)
@@ -372,5 +396,68 @@ class BottomAttachmentOptionFragment : Fragment() {
             Constants.FILE_TIME_FORMAT,
             Locale.getDefault()
         ).format(System.currentTimeMillis()).toLong()
+    }
+
+    private fun loadLocalFiles() {
+        val imageDirectory =
+            Environment.getExternalStoragePublicDirectory("DCIM/${resources.getString(R.string.app_name)}/Pictures")
+                .let {
+                    //if doesn't exist then create
+                    if (!it.isDirectory) {
+                        it.mkdirs()
+                    }
+                    it
+                }
+        val videoDirectory =
+            Environment.getExternalStoragePublicDirectory("DCIM/${resources.getString(R.string.app_name)}/Videos")
+                .let {
+                    //if doesn't exist then create
+                    if (!it.isDirectory) {
+                        it.mkdirs()
+                    }
+                    it
+                }
+
+        //loading all image file from the directory
+        if (imageDirectory.exists() && imageDirectory.isDirectory) {
+            val imageFiles = imageDirectory.listFiles() as Array<File>
+            for (file in imageFiles) {
+                if (file.isFile && file.extension == "jpg") {
+                    val video = Message(
+                        MessageType.IMAGE,
+                        null,
+                        "",
+                        "",
+                        file.toUri().toString(),
+                        file.lastModified(),
+                        false
+                    )
+                    conversation.add(video)
+                }
+            }
+        }
+
+        //loading all video file from local directory
+        if (videoDirectory.exists() && videoDirectory.isDirectory) {
+            val videoFiles = videoDirectory.listFiles() as Array<File>
+            for (file in videoFiles) {
+                if (file.isFile && file.extension == "mp4") {
+                    val video = Message(
+                        MessageType.VIDEO,
+                        null,
+                        "",
+                        "",
+                        file.toUri().toString(),
+                        file.lastModified(),
+                        false
+                    )
+                    conversation.add(video)
+                    Log.d(TAG, "callAdapter: ${file.lastModified()}")
+                }
+            }
+        }
+        conversation.sortedBy {
+            it.timestamp
+        }
     }
 }

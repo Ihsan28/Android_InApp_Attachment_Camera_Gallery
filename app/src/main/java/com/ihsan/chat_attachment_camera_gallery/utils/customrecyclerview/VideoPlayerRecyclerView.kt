@@ -112,7 +112,6 @@ class VideoPlayerRecyclerView : RecyclerView {
                         playVideo(true)
 
                     } else {
-
                         playVideo(false)
                         Log.e(TAG, "onScrollStateChanged: not last")
                     }
@@ -206,6 +205,7 @@ class VideoPlayerRecyclerView : RecyclerView {
     fun playVideo(isEndOfList: Boolean) {
         val targetPosition: Int
 
+        //not end of list
         if (!isEndOfList) {
             val startPosition =
                 (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
@@ -229,7 +229,10 @@ class VideoPlayerRecyclerView : RecyclerView {
             } else {
                 startPosition
             }
-        } else {
+        }
+        //end of list
+        else {
+
             targetPosition = mediaObjects.size - 1
         }
         Log.d(TAG, "playVideo: target position: $targetPosition")

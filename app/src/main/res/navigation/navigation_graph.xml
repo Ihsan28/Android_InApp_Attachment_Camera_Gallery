@@ -9,7 +9,7 @@
         android:id="@+id/bottomAttachmentOptionFragment"
         android:name="com.ihsan.chat_attachment_camera_gallery.ui.BottomAttachmentOptionFragment"
         android:label="fragment_bottom_attachment_option"
-        tools:layout="@layout/fragment_bottom_attachment_option" >
+        tools:layout="@layout/fragment_bottom_attachment_option">
         <action
             android:id="@+id/action_bottomAttachmentOptionFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
@@ -29,12 +29,15 @@
         <action
             android:id="@+id/action_bottomAttachmentOptionFragment_to_cameraPreviewFragment"
             app:destination="@id/cameraPreviewFragment" />
+        <action
+            android:id="@+id/action_bottomAttachmentOptionFragment_to_videoViewFragment"
+            app:destination="@id/videoViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.ihsan.chat_attachment_camera_gallery.ui.CameraFragment"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" >
+        tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/action_cameraFragment_to_bottomAttachmentOptionFragment"
             app:destination="@id/bottomAttachmentOptionFragment" />
@@ -50,7 +53,7 @@
         android:id="@+id/cameraPreviewFragment"
         android:name="com.ihsan.chat_attachment_camera_gallery.ui.CameraPreviewFragment"
         android:label="fragment_camera_preview"
-        tools:layout="@layout/fragment_camera_preview" >
+        tools:layout="@layout/fragment_camera_preview">
         <action
             android:id="@+id/action_cameraPreviewFragment_to_bottomAttachmentOptionFragment"
             app:destination="@id/bottomAttachmentOptionFragment" />
@@ -72,7 +75,7 @@
         android:id="@+id/exoPlayerFragment"
         android:name="com.ihsan.chat_attachment_camera_gallery.ui.ExoPlayerFragment"
         android:label="fragment_exo_player"
-        tools:layout="@layout/fragment_exo_player" >
+        tools:layout="@layout/fragment_exo_player">
         <argument
             android:name="uriString"
             app:argType="string"
@@ -90,5 +93,17 @@
         <action
             android:id="@+id/action_exoPlayerFragment_to_bottomAttachmentOptionFragment"
             app:destination="@id/bottomAttachmentOptionFragment" />
+        <action
+            android:id="@+id/action_exoPlayerFragment_to_videoViewFragment"
+            app:destination="@id/videoViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoViewFragment"
+        android:name="com.ihsan.chat_attachment_camera_gallery.ui.VideoViewFragment"
+        android:label="fragment_video_view"
+        tools:layout="@layout/fragment_video_view" >
+        <action
+            android:id="@+id/action_videoViewFragment_to_exoPlayerFragment"
+            app:destination="@id/exoPlayerFragment" />
     </fragment>
 </navigation>

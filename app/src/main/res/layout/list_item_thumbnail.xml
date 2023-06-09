@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="10dp">
+
+    <ImageView xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/local_img"
+        android:layout_width="150dp"
+        android:layout_height="170dp"
+        android:contentDescription="Image"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <RelativeLayout
+        android:id="@+id/video_player_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <com.google.android.exoplayer2.ui.StyledPlayerView
+            android:id="@+id/exo_player"
+            android:layout_width="150dp"
+            android:layout_height="170dp"
+            app:use_controller="true"
+            android:keepScreenOn="true"/>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

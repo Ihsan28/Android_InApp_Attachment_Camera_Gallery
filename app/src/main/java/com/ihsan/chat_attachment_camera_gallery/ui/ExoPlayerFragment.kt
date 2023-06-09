@@ -81,6 +81,8 @@ class ExoPlayerFragment : Fragment() {
                 BackState.HOME->navigateBackToHome(view)
                 BackState.CAMERA->Navigation.findNavController(it)
                     .navigate(R.id.action_exoPlayerFragment_to_cameraFragment)
+                BackState.VIDEO->Navigation.findNavController(it)
+                    .navigate(R.id.action_exoPlayerFragment_to_videoViewFragment)
             }
         }
 
@@ -93,6 +95,8 @@ class ExoPlayerFragment : Fragment() {
                         BackState.HOME->navigateBackToHome(view)
                         BackState.CAMERA->Navigation.findNavController(view)
                             .navigate(R.id.action_exoPlayerFragment_to_cameraFragment)
+                        BackState.VIDEO->Navigation.findNavController(view)
+                            .navigate(R.id.action_exoPlayerFragment_to_videoViewFragment)
                     }
                 }
             })

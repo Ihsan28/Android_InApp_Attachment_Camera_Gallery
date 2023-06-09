@@ -105,6 +105,7 @@ class CameraPreviewFragment : Fragment() {
                 BackState.HOME->navigateBackToHome(it)
                 BackState.CAMERA->Navigation.findNavController(it)
                     .navigate(R.id.action_cameraPreviewFragment_to_cameraFragment)
+                else->{}
             }
         }
 
@@ -117,6 +118,7 @@ class CameraPreviewFragment : Fragment() {
                         BackState.HOME->navigateBackToHome(view)
                         BackState.CAMERA->Navigation.findNavController(view)
                             .navigate(R.id.action_exoPlayerFragment_to_cameraFragment)
+                        else->{}
                     }
                 }
             })

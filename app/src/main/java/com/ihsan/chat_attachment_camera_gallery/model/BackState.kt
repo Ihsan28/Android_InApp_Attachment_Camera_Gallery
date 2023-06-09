@@ -5,5 +5,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class BackState : Parcelable {
-    HOME, CAMERA
+    HOME, CAMERA,VIDEO
 }

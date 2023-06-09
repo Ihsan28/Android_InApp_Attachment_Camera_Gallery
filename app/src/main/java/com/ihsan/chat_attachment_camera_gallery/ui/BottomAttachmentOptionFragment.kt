@@ -95,6 +95,7 @@ class BottomAttachmentOptionFragment : Fragment() {
         if (savedInstanceState != null) {
             val savedRecyclerState = savedInstanceState.getParcelable<Parcelable>("recyclerViewState")
             recyclerView.layoutManager?.onRestoreInstanceState(savedRecyclerState)
+            Log.d(TAG, "onViewCreated: savedRecyclerState")
             if (conversation.isNotEmpty()) {
                 Log.d(TAG, "callAdapter: ${conversation.size}")
                 recyclerView.adapter = MessageAdapter(conversation)
@@ -258,7 +259,8 @@ class BottomAttachmentOptionFragment : Fragment() {
             arrayOf<CharSequence>(
                 "Camera",
                 "Choose Images",
-                "Choose Videos"
+                "Choose Videos",
+                "Show Videos"
             )
 
         val builder = AlertDialog.Builder(requireContext())
@@ -279,6 +281,12 @@ class BottomAttachmentOptionFragment : Fragment() {
 
                 options[item] == "Choose Videos" -> {
                     openGalleryForVideos()
+                }
+
+                options[item] == "Show Videos" -> {
+                    Navigation.findNavController(view).navigate(
+                        R.id.action_bottomAttachmentOptionFragment_to_videoViewFragment
+                    )
                 }
             }
         }

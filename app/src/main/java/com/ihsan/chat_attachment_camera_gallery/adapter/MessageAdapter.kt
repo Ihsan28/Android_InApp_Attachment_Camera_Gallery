@@ -36,6 +36,7 @@ class MessageAdapter(private val messageList: List<Message>) :
         val playImageView: ImageView = itemView.findViewById(R.id.play_imageView)
         val videoView: VideoView = itemView.findViewById(R.id.videoPlayer)
         val messageCard: CardView = itemView.findViewById(R.id.message_card)
+        val relativelayout: RelativeLayout = itemView.findViewById(R.id.relativeLayoutMedia)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -51,6 +52,7 @@ class MessageAdapter(private val messageList: List<Message>) :
         val imageView = holder.imageView
         val playImageView = holder.playImageView
         val textView = holder.textView
+        val relativeLayout = holder.relativelayout
 
         //android:foreground="@drawable/ic_play_circle_outline"
         Log.d(TAG, "onBindViewHolder: $message")
@@ -68,45 +70,18 @@ class MessageAdapter(private val messageList: List<Message>) :
             )
         }
 
+
+
         //changing UI based in message type and loading message
         when (message.messageType) {
             //for video message
             MessageType.VIDEO -> {
-                imageView.visibility = ViewGroup.VISIBLE
                 playImageView.visibility = ViewGroup.VISIBLE
-                textView.visibility = ViewGroup.GONE
+                /*relativeLayout.visibility = ViewGroup.VISIBLE
+                imageView.visibility = ViewGroup.VISIBLE
                 videoView.visibility = ViewGroup.GONE
-                textView.text = null
-
-                var contentHeight=0
-                //load thumbnail for the video
-                Glide.with(MyApplication.instance)
-                    .asBitmap()
-                    .load(message.data)
-                    .placeholder(R.drawable.ic_loading) // Optional placeholder image
-                    .error(R.drawable.ic_cancel) // Optional error image
-                    .into(object : CustomTarget<Bitmap>() {
-                        override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap>?
-                        ) {
-                            val bitmapWidth = resource.width
-                            val bitmapHeight = resource.height
-                            //ratio of the video bitmap
-                            val bitmapRatio = bitmapHeight.toFloat() / bitmapWidth.toFloat()
-                            //getting the content height for the video
-                            contentHeight=(imageView.width * bitmapRatio).toInt()
-                            imageView.layoutParams.height=contentHeight
-                            playImageView.layoutParams.height=contentHeight
-                            imageView.setImageBitmap(resource)
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                            imageView.visibility = ViewGroup.GONE
-                        }
-
-                        override fun onLoadFailed(errorDrawable: Drawable?) {}
-                    })
+                textView.visibility = ViewGroup.GONE
+                textView.text = null*/
 
                 //click listener for video media item
                 messageCardView.setOnClickListener {
@@ -115,11 +90,9 @@ class MessageAdapter(private val messageList: List<Message>) :
                         videoView.setVideoURI(null)
                         imageView.visibility = ViewGroup.VISIBLE
                         playImageView.visibility = ViewGroup.VISIBLE
-                        videoView.visibility = ViewGroup.GONE
+                        videoView.visibility = ViewGroup.INVISIBLE
                     } else {
                         videoView.visibility = ViewGroup.VISIBLE
-                        //setting custom height
-                        videoView.layoutParams.height=contentHeight
                         //parsing video
                         val videoUri = Uri.parse(message.data)
                         videoView.setVideoURI(videoUri)
@@ -141,7 +114,7 @@ class MessageAdapter(private val messageList: List<Message>) :
                 messageCardView.setOnLongClickListener {
                     val action =
                         BottomAttachmentOptionFragmentDirections.actionBottomAttachmentOptionFragmentToExoPlayerFragment(
-                            BackState.HOME,message.data, true
+                            BackState.HOME, message.data, true
                         )
                     Navigation.findNavController(holder.itemView).navigate(action)
                     return@setOnLongClickListener true
@@ -150,18 +123,14 @@ class MessageAdapter(private val messageList: List<Message>) :
 
             //for image message
             MessageType.IMAGE -> {
-                imageView.visibility = ViewGroup.VISIBLE
-                textView.visibility = ViewGroup.GONE
-                playImageView.visibility = ViewGroup.GONE
                 videoView.visibility = ViewGroup.GONE
-                textView.text = null
-                imageView.foreground = null
+                playImageView.visibility = ViewGroup.GONE
 
                 messageCardView.setOnClickListener {
                     //Navigate to Preview and Crop
                     val action =
                         BottomAttachmentOptionFragmentDirections.actionBottomAttachmentOptionFragmentToCameraPreviewFragment(
-                            message.data,BackState.HOME
+                            message.data, BackState.HOME
                         )
                     Navigation.findNavController(it).navigate(action)
                 }
@@ -169,43 +138,34 @@ class MessageAdapter(private val messageList: List<Message>) :
             //for text message
             MessageType.TEXT -> {
                 textView.visibility = ViewGroup.VISIBLE
+
                 imageView.visibility = ViewGroup.GONE
                 playImageView.visibility = ViewGroup.GONE
                 videoView.visibility = ViewGroup.GONE
-                imageView.foreground = null
-                imageView.background = null
-                videoView.setVideoURI(null)
+                relativeLayout.visibility = ViewGroup.GONE
                 textView.text = message.data
             }
         }
+    }
 
-        if (message.messageType == MessageType.IMAGE) {
-            //load thumbnail for the video
-            Glide.with(MyApplication.instance)
-                .asBitmap()
-                .load(message.data)
-                .placeholder(R.drawable.ic_loading) // Optional placeholder image
-                .error(R.drawable.ic_cancel) // Optional error image
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: Transition<in Bitmap>?
-                    ) {
-                        val layoutParams = imageView.layoutParams
-                        val bitmapWidth = resource.width
-                        val bitmapHeight = resource.height
-                        val bitmapRatio = bitmapHeight.toFloat() / bitmapWidth.toFloat()
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        val message = messageList[holder.bindingAdapterPosition]
+        val relativeLayout= holder.relativelayout
+        val imageView = holder.imageView
+        val videoView = holder.videoView
+        val textView = holder.textView
+        //changing media layout visibility and shape based on media shape
+        if (message.messageType == MessageType.VIDEO || message.messageType == MessageType.IMAGE) {
+            relativeLayout.visibility = ViewGroup.VISIBLE
+            imageView.visibility = ViewGroup.VISIBLE
+            //playImageView.visibility = ViewGroup.VISIBLE
 
-                        layoutParams.height = (imageView.width * bitmapRatio).toInt()
-                        imageView.setImageBitmap(resource)
-                    }
+            videoView.visibility = ViewGroup.INVISIBLE
+            textView.visibility = ViewGroup.GONE
 
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                        imageView.visibility = ViewGroup.GONE
-                    }
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {}
-                })
+            //loading video thumbnail image using glide
+            loadResizedLayoutImageWithGlide(message.data, imageView, relativeLayout)
         }
     }
 
@@ -213,10 +173,60 @@ class MessageAdapter(private val messageList: List<Message>) :
         super.onViewDetachedFromWindow(holder)
         Log.d(TAG, "bindingAdapterPosition: ${holder.bindingAdapterPosition}")
         if (messageList[holder.bindingAdapterPosition].messageType == MessageType.VIDEO && holder.videoView.isPlaying) {
-            holder.videoView.setVideoURI(null)
-            holder.imageView.visibility = ViewGroup.VISIBLE
-            holder.playImageView.visibility=ViewGroup.VISIBLE
+            holder.playImageView.visibility = ViewGroup.VISIBLE
         }
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.imageView.setImageBitmap(null)
+        holder.videoView.stopPlayback()
+        holder.videoView.setVideoURI(null)
+    }
+
+    private fun loadResizedLayoutImageWithGlide(
+        imageData: String,
+        imageView: ImageView,
+        relativeLayout: RelativeLayout
+    ) {
+        var contentWidth: Float
+        //load thumbnail for the video
+        Glide.with(MyApplication.instance)
+            .asBitmap()
+            .load(imageData)
+            .placeholder(R.drawable.ic_loading) // Optional placeholder image
+            .error(R.drawable.ic_cancel) // Optional error image
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    //ratio of the video bitmap
+                    val bitmapRatio = resource.width.toFloat()/resource.height.toFloat()
+                    //getting the content height for the video
+                    contentWidth = (imageView.height * bitmapRatio)
+
+                    if (contentWidth > 900) {
+                        contentWidth *= .8f
+                        val contentHeight = relativeLayout.layoutParams.height * .8f
+
+                        relativeLayout.layoutParams.height = contentHeight.toInt()
+                        relativeLayout.layoutParams.width = contentWidth.toInt()
+                        Log.d(TAG, "onResourceReady: height:${contentHeight} width:$contentWidth")
+                    }else{
+                        relativeLayout.layoutParams.width = contentWidth.toInt()
+                    }
+
+
+                    imageView.setImageBitmap(resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    relativeLayout.visibility = ViewGroup.GONE
+                }
+
+                override fun onLoadFailed(errorDrawable: Drawable?) {}
+            })
     }
 
     override fun getItemCount(): Int {

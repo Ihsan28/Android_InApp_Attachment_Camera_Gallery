@@ -218,14 +218,6 @@ class BottomAttachmentOptionFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(
-            "recyclerViewState",
-            recyclerView.layoutManager?.onSaveInstanceState()
-        )
-    }
-
     private fun addToConversation(messageType: MessageType, message: String) {
         val textMessage = Message(
             messageType,

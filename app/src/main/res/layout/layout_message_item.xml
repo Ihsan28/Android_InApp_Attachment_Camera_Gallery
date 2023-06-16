@@ -22,14 +22,16 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/relativeLayoutMedia"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone">
 
                 <VideoView
                     android:id="@+id/videoPlayer"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="match_parent"
                     android:scaleType="centerInside"
                     android:layout_centerHorizontal="true"
                     android:foregroundGravity="center"
@@ -38,13 +40,13 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="match_parent"
                     android:contentDescription="@string/this_is_a_image"
                     android:visibility="gone" />
                 <ImageView
                     android:id="@+id/play_imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="match_parent"
                     android:src="@drawable/ic_play_circle_outline"
                     android:background="#00BB86FC"
                     android:contentDescription="@string/this_is_a_image"

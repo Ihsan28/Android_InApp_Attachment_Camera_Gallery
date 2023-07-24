@@ -55,6 +55,8 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 
 class CameraFragment : Fragment() {
@@ -95,7 +97,7 @@ class CameraFragment : Fragment() {
         val btnBack = binding.backBtn
         val flipCamera = binding.switchBtn
 
-        cameraAspectRatio = getCameraAspectRatio()
+        cameraAspectRatio = aspectRatio()
         chronometer = binding.chronometer
         recordingIndicator = binding.recordingIndicator
         captureLoadingImageView = binding.loadingImageView
@@ -237,6 +239,22 @@ class CameraFragment : Fragment() {
             displayMetrics.heightPixels = windowManager.defaultDisplay.height
         }
         return displayMetrics
+    }
+
+    private fun aspectRatio(): Int {
+        val displayMetrics = getDisplayMetrics()
+        val width = displayMetrics.widthPixels.toFloat()
+        val height = displayMetrics.heightPixels.toFloat()
+
+        val previewRatio = max(width, height).toDouble() / min(width, height)
+
+        val RATIO_4_3_VALUE = 4.0 / 3.0
+        val RATIO_16_9_VALUE = 16.0 / 9.0
+
+        if (abs(previewRatio - RATIO_4_3_VALUE) <= abs(previewRatio - RATIO_16_9_VALUE)) {
+            return AspectRatio.RATIO_4_3
+        }
+        return AspectRatio.RATIO_16_9
     }
 
     private fun getCameraAspectRatio(): Int {
